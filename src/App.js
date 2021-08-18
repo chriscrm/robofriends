@@ -1,12 +1,42 @@
+import React, { useEffect, useState } from "react";
 import CardList from "./Components/CardList";
+import SearchBox from "./Components/SearchBox";
 import { robots } from "./robots";
+import "./App.css";
+import Scroll from "./Components/Scroll";
 
 function App() {
-  return (
-    <div>
-      <CardList robots={robots} />
-    </div>
-  );
+  const [searchField, setSearchField] = useState([]);
+
+  const searchChangeHandler = (event) => {
+    const filteredRobot = robots.filter((robot) => {
+      return robot.name
+        .toLowerCase()
+        .includes(event.target.value.toLowerCase());
+    });
+
+    setSearchField(filteredRobot);
+  };
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((data) => setSearchField(data));
+  }, []);
+
+  if (searchField.length === 0) {
+    return <h2 className="tc">Loading...</h2>;
+  } else {
+    return (
+      <div className="tc">
+        <h1 className="f1">ROBOFRIENDS</h1>
+        <SearchBox searchChange={searchChangeHandler} />
+        <Scroll>
+          <CardList robots={searchField} />
+        </Scroll>
+      </div>
+    );
+  }
 }
 
 export default App;
