@@ -24,19 +24,17 @@ function App() {
       .then((data) => setSearchField(data));
   }, []);
 
-  if (searchField.length === 0) {
-    return <h2 className="tc">Loading...</h2>;
-  } else {
-    return (
-      <div className="tc">
-        <h1 className="f1">ROBOFRIENDS</h1>
-        <SearchBox searchChange={searchChangeHandler} />
-        <Scroll>
-          <CardList robots={searchField} />
-        </Scroll>
-      </div>
-    );
-  }
+  return !searchField.length ? (
+    <h2 className="tc">Loading...</h2>
+  ) : (
+    <div className="tc">
+      <h1 className="f1">ROBOFRIENDS</h1>
+      <SearchBox searchChange={searchChangeHandler} />
+      <Scroll>
+        <CardList robots={searchField} />
+      </Scroll>
+    </div>
+  );
 }
 
 export default App;
